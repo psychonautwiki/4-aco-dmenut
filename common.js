@@ -142,6 +142,21 @@
 			return wrapper;
 		}
 
+		_$retrieveLink (anchorLink) {
+			/* if we have a FQ URL, return */
+			if(/^(https?|ftp):\/\/[^s\/$.?#].[^s]*$/i.test(anchorLink)){
+				return anchorLink;
+			}
+
+			/* if we have a link with heading slash, use as basepath */
+			if (/\/(.*)$/.test(anchorLink)) {
+				return `${this._anchorBaseUrl}${anchorLink}`
+			}
+
+			/* else, treat as article */
+			return `${this._anchorBaseUrl}/wiki/${anchorLink}`;
+		}
+
 		_$menuLinkItem (linkItems) {
 			const wrapper = this._$createElement('li');
 
@@ -150,7 +165,7 @@
 
 				const anchor = this._$createElement('a');
 
-				anchor.href = `${this._anchorBaseUrl}/wiki/${anchorLink}`;
+				anchor.href = this._$retrieveLink(anchorLink);
 				anchor.innerText = title;
 
 				anchor.classList.add('mw-ui-icon', 'mw-ui-icon-before');
