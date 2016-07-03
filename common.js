@@ -157,6 +157,12 @@
 			return `${this._anchorBaseUrl}/wiki/${anchorLink}`;
 		}
 
+		_$isCurrentPage (anchorLink) {
+			const massagedAnchor = anchorLink.replace(/\s/g, '_')
+
+			return RegExp(massagedAnchor, 'i').test(location.href);
+		}
+
 		_$menuLinkItem (linkItems) {
 			const wrapper = this._$createElement('li');
 
@@ -172,6 +178,10 @@
 				anchor.classList.add(...anchorClasses);
 
 				wrapper.appendChild(anchor);
+
+				if (this._$isCurrentPage(anchorLink)) {
+					wrapper.classList.add('mw-ui-menu-current-page');
+				}
 			});
 
 			return wrapper;
