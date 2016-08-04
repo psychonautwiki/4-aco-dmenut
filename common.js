@@ -47,6 +47,8 @@
 					[<username>] [Logout]
 			*/
 
+			const encodedPageName = ('encodeURIComponent' in window) ? encodeURIComponent(this._dependencies.userState.getPageName()) : '';
+
 			this._menuUserLinks = [
 				[ANON ^ USER, [['Watchlist', 'Special:Watchlist', ['mw-ui-icon-watchlist']]]],
 				[USER, [['Upload', 'Special:Uploads', ['mw-ui-icon-uploads', 'menu-item-upload']]]],
@@ -55,8 +57,8 @@
 					[`${username}`, `Special:UserProfile/${username}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile', 'truncated-text', 'primary-action']],
 					['Logout', 'Special:UserLogout', ['mw-ui-icon', 'mw-ui-icon-element', 'mw-ui-icon-secondary-logout', 'secondary-action', 'truncated-text']]
 				]],
-				[ANON, [['Login', 'Special:UserLogin', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile']]]],
-				[ANON, [['Register', 'Special:UserRegister', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-anonymous-white']]]]
+				[ANON, [['Login', `/w/index.php?title=Special:UserLogin&returnto=${encodedPageName}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile']]]],
+				[ANON, [['Register', `/w/index.php?title=Special:UserLogin&type=signup&returnto=${encodedPageName}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-anonymous-white']]]]
 			];
 		}
 
