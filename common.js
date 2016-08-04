@@ -303,6 +303,14 @@
 	class UserState {
 		constructor() {
 			this._userName = null;
+			this._userFlags = 0;
+
+			this._flags = {
+				ANON:  0b0001,
+				USER:  0b0010,
+				ADMIN: 0b0100,
+				SYSOP: 0b1000
+			};
 
 			this._populateUser();
 		}
@@ -310,11 +318,29 @@
 		_populateUser () {
 			if ('mw' in window && 'config' in window.mw) {
 				this._userName = mw.config.values.wgUserName;
+
+				if (this._userName === null)
+					this._userFlags ^= this._flags.ANON;
+
+				const userGroups = new Set(mw.config.wgUserGroups);
+
+				if (userGroups.has('user'))
+					this._userFlags ^= this._flags.USER;
+
+				if (userGroups.has('admin'))
+					this._userFlags ^= this._flags.ADMIN;
+
+				if (userGroups.has('sysop'))
+					this._userFlags ^= this._flags.SYSOP;
 			}
 		}
 
 		getUsername () {
 			return this._userName;
+		}
+
+		getUserflags () {
+			return this._userFlags;
 		}
 
 		isLoggedIn () {
