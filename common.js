@@ -31,7 +31,7 @@
 			const userState = this._dependencies.userState;
 			const {ANON, USER/*, ADMIN, SYSOP*/} = userState._flags;
 
-			const username = userState.getUsername();
+			const username = userState.getUserName();
 
 			/*
 				Anonymous user sees this:
@@ -234,7 +234,7 @@
 		}
 
 		_renderUserSection () {
-			const currentUserFlags = this._dependencies.userState.getUserflags();
+			const currentUserFlags = this._dependencies.userState.getUserFlags();
 
 			const container = this._$createElement('ul');
 
@@ -330,16 +330,21 @@
 			};
 
 			this._populateUser();
+			this._populatePage();
+		}
+
+		_hasMWMetadata () {
+			return 'mw' in window && 'config' in window.mw;
 		}
 
 		_populateUser () {
-			if ('mw' in window && 'config' in window.mw) {
+			if (this._hasMWMetadata()) {
 				this._userName = mw.config.values.wgUserName;
 
 				if (this._userName === null)
 					this._userFlags ^= this._flags.ANON;
 
-				const userGroups = new Set(mw.config.wgUserGroups);
+				const userGroups = new Set(mw.config.values.wgUserGroups);
 
 				if (userGroups.has('user'))
 					this._userFlags ^= this._flags.USER;
@@ -352,16 +357,30 @@
 			}
 		}
 
-		getUsername () {
+		/* User API */
+
+		getUserName () {
 			return this._userName;
 		}
 
-		getUserflags () {
+		getUserFlags () {
 			return this._userFlags;
 		}
 
 		isLoggedIn () {
 			return this._userName !== null;
+		}
+
+		/* Page API */
+
+		_populatePage () {
+			if (this._hasMWMetadata()) {
+				this._pageName = mw.config.values.wgPageName;
+			}
+		}
+
+		getPageName () {
+			return this._pageName;
 		}
 	}
 
