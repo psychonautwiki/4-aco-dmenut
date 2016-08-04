@@ -28,16 +28,23 @@
 		}
 
 		_populateUserLinks () {
-			const username = this._dependencies.userState.getUsername();
+			const userState = this._dependencies.userState;
+			const {ANON, USER/*, ADMIN, SYSOP*/} = userState._flags;
+
+			const username = userState.getUsername();
 
 			this._menuUserLinks = [
-				[['Watchlist', 'Special:Watchlist', ['mw-ui-icon-watchlist']]],
-				[['Upload', 'Special:Uploads', ['mw-ui-icon-uploads', 'menu-item-upload']]],
-				[['Settings', 'Special:MobileOptions', ['mw-ui-icon-mobileoptions']]],
-				[
+				[ANON ^ USER, [['Watchlist', 'Special:Watchlist', ['mw-ui-icon-watchlist']]]],
+				[USER, [['Upload', 'Special:Uploads', ['mw-ui-icon-uploads', 'menu-item-upload']]]],
+				[ANON ^ USER, [['Settings', 'Special:MobileOptions', ['mw-ui-icon-mobileoptions']]]],
+				[USER, [
 					[`${username}`, `Special:UserProfile/${username}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile', 'truncated-text', 'primary-action']],
 					['Logout', 'Special:UserLogout', ['mw-ui-icon', 'mw-ui-icon-element', 'mw-ui-icon-secondary-logout', 'secondary-action', 'truncated-text']]
-				],
+				]],
+				[ANON, [
+					['Login', 'Special:UserLogin', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile']],
+					['Register', 'Special:UserRegister', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-anonymous-white']]
+				]]
 			];
 		}
 
@@ -215,9 +222,7 @@
 		}
 
 		_renderUserSection () {
-			if (!this._dependencies.userState.isLoggedIn()) {
-				return [];
-			}
+			const currentUserFlags = this._dependencies.userState.getUserflags();
 
 			const container = this._$createElement('ul');
 
@@ -229,8 +234,8 @@
 
 			container.appendChild(this._$wrapElement('li', navLabel));
 
-			this._menuUserLinks.map(linkItems =>
-				container.appendChild(this._$menuLinkItem(linkItems))
+			this._menuUserLinks.map(([requiredUserFlags, linkAttributes]) =>
+				(currentUserFlags & requiredUserFlags) && container.appendChild(this._$menuLinkItem(linkAttributes))
 			);
 
 			return [container];
