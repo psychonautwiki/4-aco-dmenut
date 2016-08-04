@@ -33,6 +33,20 @@
 
 			const username = userState.getUsername();
 
+			/*
+				Anonymous user sees this:
+					[Watchlist]
+					[Settings]
+					[Login]
+					[Register]
+
+				Authenticated user sees this:
+					[Watchlist]
+					[Upload]
+					[Settings]
+					[<username>] [Logout]
+			*/
+
 			this._menuUserLinks = [
 				[ANON ^ USER, [['Watchlist', 'Special:Watchlist', ['mw-ui-icon-watchlist']]]],
 				[USER, [['Upload', 'Special:Uploads', ['mw-ui-icon-uploads', 'menu-item-upload']]]],
@@ -41,10 +55,8 @@
 					[`${username}`, `Special:UserProfile/${username}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile', 'truncated-text', 'primary-action']],
 					['Logout', 'Special:UserLogout', ['mw-ui-icon', 'mw-ui-icon-element', 'mw-ui-icon-secondary-logout', 'secondary-action', 'truncated-text']]
 				]],
-				[ANON, [
-					['Login', 'Special:UserLogin', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile']],
-					['Register', 'Special:UserRegister', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-anonymous-white']]
-				]]
+				[ANON, [['Login', 'Special:UserLogin', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile']]]],
+				[ANON, [['Register', 'Special:UserRegister', ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-anonymous-white']]]]
 			];
 		}
 
