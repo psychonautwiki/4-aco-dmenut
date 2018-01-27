@@ -337,17 +337,17 @@
 		}
 
 		_hasMWMetadata () {
-			return 'mw' in window && 'config' in window.mw;
+			return 'mw' in window && 'config' in window['mw'];
 		}
 
 		_populateUser () {
 			if (this._hasMWMetadata()) {
-				this._userName = mw.config.values.wgUserName;
+				this._userName = window['mw']['config']['get']('wgUserName');
 
 				if (this._userName === null)
 					this._userFlags ^= this._flags.ANON;
 
-				const userGroups = new Set(mw.config.values.wgUserGroups);
+				const userGroups = new Set(window['mw']['config']['get']('wgUserGroups'));
 
 				if (userGroups.has('user'))
 					this._userFlags ^= this._flags.USER;
@@ -378,7 +378,7 @@
 
 		_populatePage () {
 			if (this._hasMWMetadata()) {
-				this._pageName = mw.config.values.wgPageName;
+				this._pageName = window['mw']['config']['get']('wgPageName');
 			}
 		}
 
@@ -400,6 +400,6 @@
 	if (document.readyState === 'complete') {
 		initializeMenu();
 	} else {
-		window.addEventListener('load', initializeMenu);
+		window['addEventListener']('load', initializeMenu);
 	}
 };
