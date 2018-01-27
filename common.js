@@ -21,6 +21,8 @@
 			this._menu = {};
 			this._menuUserLinks = [];
 
+			this._pageName = null;
+
 			/* failover */
 			this._retryCount = 0;
 			this._retryMax = 3;
