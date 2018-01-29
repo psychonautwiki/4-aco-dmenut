@@ -380,9 +380,11 @@
 			return this._pageName;
 		}
 	}
-
+	
+	const findMenu = () => document.querySelector('.navigation-drawer .menu');
+	
 	const initializeMenu = () => {
-		const menu = document.querySelector('.navigation-drawer .menu');
+		const menu = findMenu();
 		const userState = new UserState;
 
 		MfMenu.initialize({
@@ -390,10 +392,35 @@
 		});
 	};
 
+	const tryInitMenu = () => {
+		const max_iter = 20
+		const retryInterval = 20; // ms
+		
+		let iter = 0;
+
+		const retry = () => {
+			if (iter === max_iter) {
+				return;
+			}
+
+			if (findMenu() === null) {
+				++iter;
+
+				setTimeout(retry, retryInterval * iter);
+
+				return;
+			}
+
+			initializeMenu();
+		}
+
+		retry();
+	}
+
 	/* do not attach load event handler after page is loaded */
 	if (document.readyState === 'complete') {
-		initializeMenu();
+		tryInitMenu();
 	} else {
-		window['addEventListener']('load', initializeMenu);
+		window['addEventListener']('load', tryInitMenu);
 	}
 };
