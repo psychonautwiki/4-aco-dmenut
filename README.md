@@ -9,6 +9,8 @@ $ npm install
 $ make
 ```
 
+or - as we do - just copy and paste common.js into closure-compiler using advanced mode.
+
 ## Usage
 
 Copy `build.js` into `MediaWiki:mobile.js`. Beware that custom styles _may_ need to be applied, most prominently icon-inversion styles if you want to reuse desktop icons. You can also add different icon classes with mobile-taylored images.
@@ -23,28 +25,20 @@ Here's the specific styling used for 4-aco-dmenut on [PsychonautWiki](https://ps
 /* sidebar */
 
 body.skin-minerva .menu li.mw-ui-menu-current-page {
-	background-color: #252525;
+	background-color: #8c8c8c;
 	border-left: solid 12px #FFFFFF;
 	margin-left: -12px;
 }
 
 body.skin-minerva .menu li h3 {
-	color: #cccccc;
-	font-weight: 500;
-	margin-left: 10px;
+	color: #b3b3b3;
+    font-weight: 500;
+    padding: 15px;
+    margin: 0;
 }
 
 body.skin-minerva .menu li a.mw-ui-icon, body.skin-minerva .menu li a.mw-ui-icon:active, body.skin-minerva .menu li a.mw-ui-icon:visited {
-	color: white;
-}
-
-body.skin-minerva .menu li .mw-ui-icon::before {
-	filter: invert(100%);
-}
-
-/* override inversion for existing menu icons */
-body.skin-minerva .menu ul.mw-ui-menu-user-section li .mw-ui-icon::before {
-	filter: inherit;
+	color: #bfbfbf;
 }
 
 /* fix logout button margin */
