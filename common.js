@@ -67,17 +67,17 @@
 				xhr.setRequestHeader('Content-type', 'application/json');
 			}
 
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = () => {
 				if (xhr.readyState !== 4) return;
 
 				if (!isJson) {
-					return cb(xhr.status >= 400, this.responseText);
+					return cb(xhr.status >= 400, xhr.responseText);
 				}
 
 				let response;
 
 				try {
-					response = JSON.parse(this.responseText);
+					response = JSON.parse(xhr.responseText);
 				} catch(err) {
 					return cb(err);
 				}
@@ -173,9 +173,10 @@
 		}
 
 		_$isCurrentPage (anchorLink) {
-			const massagedAnchor = anchorLink.replace(/\s/g, '_')
+			const massagedAnchor = anchorLink['replace'](/\s/g, '_');
+			const currentPage = window['decodeURIComponent'](window['location']['href'])['replace'](/\s/g, '_');
 
-			return RegExp(massagedAnchor, 'i').test(location.href);
+			return RegExp(massagedAnchor, 'i').test(currentPage);
 		}
 
 		_$menuLinkItem (linkItems) {
