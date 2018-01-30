@@ -43,7 +43,7 @@
 					[<username>] [Logout]
 			*/
 
-			const encodedPageName = ('encodeURIComponent' in window) ? encodeURIComponent(this._dependencies.userState.getPageName()) : '';
+			const encodedPageName = ('encodeURIComponent' in window) ? window['encodeURIComponent'](this._dependencies.userState.getPageName()) : '';
 
 			this._menuUserLinks = [
 				[ANON ^ USER, [['Watchlist', 'Special:Watchlist', ['mw-ui-icon-watchlist']]]],
@@ -59,33 +59,29 @@
 		}
 
 		_genericXhr (method, path, data, isJson, cb) {
-			const xhr = new XMLHttpRequest();
+			const xhr = new window['XMLHttpRequest']();
 
-			xhr.open(method, path, true);
+			xhr['open'](method, path, true);
 
 			if (isJson) {
-				xhr.setRequestHeader('Content-type', 'application/json');
+				xhr['setRequestHeader']('Content-type', 'application/json');
 			}
 
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState !== 4) return;
+			xhr['onreadystatechange'] = () => {
+				if (xhr['readyState'] !== 4) return;
 
 				if (!isJson) {
-					return cb(xhr.status >= 400, this.responseText);
+					return cb(xhr['status'] >= 400, xhr['responseText']);
 				}
 
-				let response;
-
 				try {
-					response = JSON.parse(this.responseText);
+					cb(xhr['status'] >= 400, JSON.parse(xhr['responseText']));
 				} catch(err) {
 					return cb(err);
 				}
-
-				cb(xhr.status >= 400, response);
 			}
 
-			xhr.send(data);
+			xhr['send'](data);
 		}
 
 		_initSidebar({err, data}) {
@@ -100,7 +96,7 @@
 		_ingestError (err) {
 			if ('Raven' in window && 'captureException' in Raven) {
 				/* send to sentry */
-				Raven.captureException(err);
+				window['Raven']['captureException'](err);
 			}
 		}
 
@@ -126,10 +122,10 @@
 				/* process lines */
 				.map(line => [
 					/* get level by stars */
-					line.match(/\*+/)[0].length,
+					line['match'](/\*+/)[0].length,
 
 					/* get line payload */
-					line.match(/\*+(.*?)$/)[1]
+					line['match'](/\*+(.*?)$/)[1]
 				]);
 
 			return menuLines.reduce((acc, curr) => {
@@ -146,13 +142,13 @@
 		}
 
 		_$createElement (...args) {
-			return this._dom.document.createElement(...args);
+			return this._dom['document']['createElement'](...args);
 		}
 
 		_$wrapElement (tle, element) {
 			const wrapper = this._$createElement(tle);
 
-			wrapper.appendChild(element);
+			wrapper['appendChild'](element);
 
 			return wrapper;
 		}
@@ -173,9 +169,10 @@
 		}
 
 		_$isCurrentPage (anchorLink) {
-			const massagedAnchor = anchorLink.replace(/\s/g, '_')
+			const massagedAnchor = anchorLink['replace'](/\s/g, '_');
+			const currentPage = window['decodeURIComponent'](window['location']['href'])['replace'](/\s/g, '_');
 
-			return RegExp(massagedAnchor, 'i').test(location.href);
+			return RegExp(massagedAnchor, 'i').test(currentPage);
 		}
 
 		_$menuLinkItem (linkItems) {
@@ -186,16 +183,16 @@
 
 				const anchor = this._$createElement('a');
 
-				anchor.href = this._$retrieveLink(anchorLink);
-				anchor.innerText = title;
+				anchor['href'] = this._$retrieveLink(anchorLink);
+				anchor['innerText'] = title;
 
-				anchor.classList.add('mw-ui-icon', 'mw-ui-icon-before');
-				anchor.classList.add(...anchorClasses);
+				anchor['classList']['add']('mw-ui-icon', 'mw-ui-icon-before');
+				anchor['classList']['add'](...anchorClasses);
 
-				wrapper.appendChild(anchor);
+				wrapper['appendChild'](anchor);
 
 				if (this._$isCurrentPage(anchorLink)) {
-					wrapper.classList.add('mw-ui-menu-current-page');
+					wrapper['classList']['add']('mw-ui-menu-current-page');
 				}
 			});
 
@@ -211,9 +208,9 @@
 				this._$wrapElement('li', navLabel),
 
 				...section[1].map(item => {
-					const [anchorLink, title] = item.split('|');
+					const [anchorLink, title] = item['split']('|');
 
-					const iconClassSuffix = title.replace(/\s+/ig, '-');
+					const iconClassSuffix = title['replace'](/\s+/ig, '-');
 					const anchorClass = `icon-${iconClassSuffix}`;
 
 					return this._$menuLinkItem([[title, anchorLink, [anchorClass]]]);
@@ -223,7 +220,7 @@
 			const container = this._$createElement('ul');
 
 			subsections.forEach(subsection =>
-				container.appendChild(subsection)
+				container['appendChild'](subsection)
 			);
 
 			return container;
@@ -234,16 +231,16 @@
 
 			const container = this._$createElement('ul');
 
-			container.classList.add('mw-ui-menu-user-section')
+			container['classList']['add']('mw-ui-menu-user-section')
 
 			const navLabel = this._$createElement('h3');
 
-			navLabel.innerText = 'User actions';
+			navLabel['innerText'] = 'User actions';
 
-			container.appendChild(this._$wrapElement('li', navLabel));
+			container['appendChild'](this._$wrapElement('li', navLabel));
 
 			this._menuUserLinks.map(([requiredUserFlags, linkAttributes]) =>
-				(currentUserFlags & requiredUserFlags) && container.appendChild(this._$menuLinkItem(linkAttributes))
+				(currentUserFlags & requiredUserFlags) && container['appendChild'](this._$menuLinkItem(linkAttributes))
 			);
 
 			return [container];
@@ -254,9 +251,9 @@
 				this._renderSection(section)
 			);
 
-			const container = this._dom.document.createElement('div');
+			const container = this._dom['document']['createElement']('div');
 
-			container.classList.add('menu', 'view-border-box');
+			container['classList']['add']('menu', 'view-border-box');
 
 			const userSection = this._renderUserSection();
 
@@ -264,7 +261,7 @@
 				...renderedSections,
 				...userSection
 			].forEach(renderedSection =>
-				container.appendChild(renderedSection)
+				container['appendChild'](renderedSection)
 			);
 
 			return container;
@@ -283,10 +280,10 @@
 			const renderedMenuSections = this._renderMenu(sections);
 
 			const _menu = this._dom.menu;
-			const _menuParent = _menu.parentNode;
+			const _menuParent = _menu['parentNode'];
 
-			_menuParent.removeChild(_menu);
-			_menuParent.appendChild(renderedMenuSections);
+			_menuParent['removeChild'](_menu);
+			_menuParent['appendChild'](renderedMenuSections);
 
 			return /* bail */;
 		}
@@ -381,14 +378,17 @@
 		}
 	}
 	
-	const findMenu = () => document.querySelector('.navigation-drawer .menu');
+	const findMenu = () => window['document']['querySelector']('.navigation-drawer .menu');
 	
 	const initializeMenu = () => {
 		const menu = findMenu();
 		const userState = new UserState;
 
 		MfMenu.initialize({
-			dom: {document, menu}, userState
+			dom: {
+				document: window['document'],
+				menu
+			}, userState
 		});
 	};
 
@@ -418,7 +418,7 @@
 	}
 
 	/* do not attach load event handler after page is loaded */
-	if (document.readyState === 'complete') {
+	if (window['document']['readyState'] === 'complete') {
 		tryInitMenu();
 	} else {
 		window['addEventListener']('load', tryInitMenu);
