@@ -24,6 +24,7 @@
     "npm": "^3.9.5",
     "regenerator": "^0.8.46",
     "uglify-js": "^2.6.2",
-    "uglifyify": "^3.0.1"
+    "uglifyify": "^3.0.1",
+    "uglifyjs": "^2.4.11"
   }
 }
