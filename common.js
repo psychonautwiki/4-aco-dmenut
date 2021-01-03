@@ -46,15 +46,15 @@
             const encodedPageName = ('encodeURIComponent' in window) ? encodeURIComponent(this._dependencies.userState.getPageName()) : '';
 
             this._menuUserLinks = [
-                [ANON ^ USER, [['Watchlist', 'Special:Watchlist', ['mw-ui-icon-watchlist']]]],
-                [USER, [['Upload', 'Special:Uploads', ['mw-ui-icon-uploads', 'menu-item-upload']]]],
-                [ANON ^ USER, [['Settings', 'Special:MobileOptions', ['mw-ui-icon-mobileoptions']]]],
+                [ANON ^ USER, [['Watchlist', 'Special:Watchlist', ['menu__item--unStar', 'mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-minerva-unStar']]]],
+                [USER, [['Upload', 'Special:Uploads', ['mw-ui-icon-upload', 'menu-item-upload']]]],
+                [ANON ^ USER, [['Settings', 'Special:MobileOptions', ['menu__item--settings', 'mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-minerva-settings']]]],
                 [USER, [
-                    [`${username}`, `Special:UserProfile/${username}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile', 'truncated-text', 'primary-action']],
-                    ['Logout', 'Special:UserLogout', ['mw-ui-icon', 'mw-ui-icon-element', 'mw-ui-icon-secondary-logout', 'secondary-action', 'truncated-text']]
+                    [`${username}`, `Special:UserProfile/${username}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-wikimedia-userAvatar-base20', 'truncated-text', 'primary-action']],
+                    ['Logout', 'Special:UserLogout', ['truncated-text', 'secondary-action', 'menu__item--logout', 'mw-ui-icon', 'mw-ui-icon-element', 'mw-ui-icon-minerva-logOut']]
                 ]],
-                [ANON, [['Login', `/w/index.php?title=Special:UserLogin&returnto=${encodedPageName}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-profile']]]],
-                [ANON, [['Register', `/w/index.php?title=Special:UserLogin&type=signup&returnto=${encodedPageName}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-anonymous-white']]]]
+                [ANON, [['Login', `/w/index.php?title=Special:UserLogin&returnto=${encodedPageName}`, ['menu__item--login', 'mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-minerva-logIn']]]],
+                [ANON, [['Register', `/w/index.php?title=Special:UserLogin&type=signup&returnto=${encodedPageName}`, ['mw-ui-icon', 'mw-ui-icon-before', 'mw-ui-icon-userAvatarOutline']]]]
             ];
         }
 
