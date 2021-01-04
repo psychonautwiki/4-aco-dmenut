@@ -11,7 +11,7 @@
             this._dependencies = {userState};
 
             this._menuPath = '/wiki/MediaWiki:Sidebar?action=raw';
-            this._anchorBaseUrl = 'https://psychonautwiki.org'
+            this._anchorBaseUrl = 'https://m.psychonautwiki.org'
 
             this._menu = {};
             this._menuUserLinks = [];
